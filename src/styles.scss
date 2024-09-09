@@ -1,0 +1,373 @@
+@mixin phone {
+  @media screen and (max-width: 480px) {
+    @content;
+    ::-webkit-scrollbar {
+      width: 2px;
+    }
+  }
+}
+
+@mixin tablet {
+  @media screen and (max-width: 768px) {
+    @content;
+    ::-webkit-scrollbar {
+      width: 3px;
+    }
+  }
+}
+
+@mixin phone-and-tablet {
+  @include phone {
+    @content;
+  }
+  @include tablet {
+    @content;
+  }
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  --background-color: rgb(236, 177, 187);
+  --logo-color: rgb(185, 84, 101);
+  --light-purple: #a47fc7;
+  --dark-purple: #51346d;
+  --light-separator: rgb(206, 171, 238);
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--light-purple);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--dark-purple);
+}
+
+.formContainer {
+  background: var(--background-color);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .formWrapper {
+    padding: 20px 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background-color: white;
+    border-radius: 12px;
+    align-items: center;
+
+    .logo {
+      color: var(--logo-color);
+      font-size: 36px;
+    }
+
+    .title {
+      font-size: 20px;
+    }
+
+    form {
+      display: flex;
+      color: var(--logo-color);
+      flex-direction: column;
+      gap: 10px;
+
+      input {
+        padding: 8px;
+        border: none;
+        border-bottom: 1px solid var(--logo-color);
+      }
+
+      input:focus {
+        outline: none;
+      }
+
+      .file-picker {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        font-size: 12px;
+        cursor: pointer;
+
+        img {
+          height: 32px;
+          width: 32px;
+        }
+      }
+
+      button {
+        color: white;
+        padding: 10px 0px;
+        border: none;
+        background-color: var(--logo-color);
+      }
+    }
+    p {
+      color: var(--logo-color);
+      font-size: 12px;
+      margin-top: 10px;
+    }
+  }
+}
+
+.home {
+  background-color: var(--background-color);
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .container {
+    position: relative;
+    width: 68%;
+    height: 80%;
+    border: 2px solid white;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+
+    .sidebar {
+      position: relative;
+      flex: 1;
+      background-color: var(--light-purple);
+      padding-bottom: 30px;
+
+      .navbar {
+        height: 50px;
+        background-color: var(--dark-purple);
+        color: white;
+        padding: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h2 {
+          font-size: 24px;
+        }
+
+        .user {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+
+          img {
+            background: white;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            object-fit: cover;
+          }
+
+          button {
+            background-color: var(--light-purple);
+            border: none;
+            color: white;
+            padding: 4px;
+            cursor: pointer;
+          }
+
+          @include phone {
+            button {
+              position: absolute;
+              bottom: 8px;
+              left: 28px;
+              background-color: var(--dark-purple);
+            }
+          }
+        }
+      }
+      @include phone-and-tablet {
+        h2 {
+          display: none;
+        }
+      }
+
+      @include phone {
+        flex: none;
+        width: 100px;
+      }
+    }
+    .chat {
+      flex: 2;
+      background-color: #ddcfe9;
+    }
+
+    @include phone-and-tablet {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 0px;
+    }
+  }
+}
+
+.search {
+  border-bottom: 1px solid rgb(240, 208, 255);
+  .searchForm {
+    height: 28px;
+    margin-bottom: 10px;
+
+    input {
+      padding: 2px 8px;
+      height: 100%;
+      width: 100%;
+      background-color: transparent;
+      border: none;
+      outline: none;
+
+      &::placeholder {
+        color: rgb(240, 208, 255);
+      }
+    }
+  }
+}
+
+.messages {
+  overflow-y: scroll;
+  padding: 12px;
+  height: calc(100% - 144px);
+
+  .message {
+    display: flex;
+    margin-top: 12px;
+    gap: 8px;
+    .messageInfo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      img {
+        width: 40px;
+        border-radius: 50%;
+      }
+      span {
+        color: rgb(87, 87, 87);
+        font-size: 12px;
+      }
+    }
+
+    .messageContent {
+      max-width: 65%;
+      padding-top: 4px;
+      p {
+        height: fit-content;
+        padding: 6px;
+        border-radius: 0px 14px 14px 14px;
+        background-color: white;
+      }
+    }
+    &.owner {
+      flex-direction: row-reverse;
+      .messageContent {
+        p {
+          color: white;
+          background-color: #82659e;
+          border-radius: 14px 0px 14px 14px;
+        }
+      }
+    }
+  }
+}
+
+.input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  background-color: white;
+  padding: 8px;
+
+  input {
+    border: none;
+    outline: none;
+    font-size: 18px;
+    width: 100%;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    img {
+      width: 24px;
+      cursor: pointer;
+    }
+    button {
+      color: white;
+      font-size: 16px;
+      padding: 6px;
+      border: none;
+      background: var(--dark-purple);
+      cursor: pointer;
+    }
+  }
+}
+
+.userChat {
+  color: white;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+  }
+
+  .name {
+    font-weight: bold;
+  }
+  .last-message {
+    color: rgb(240, 208, 255);
+  }
+
+  &:hover {
+    background-color: var(--dark-purple);
+  }
+
+  @include phone-and-tablet {
+    img {
+      width: 24px;
+      height: 24px;
+    }
+    .name {
+      font-size: 14px;
+    }
+    .last-message {
+      font-size: 12px;
+    }
+  }
+}
+
+.chat {
+  .chatInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    padding: 8px;
+    color: white;
+    background-color: var(--light-purple);
+
+    .chatIcons {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      img {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+      }
+    }
+  }
+}
