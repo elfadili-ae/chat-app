@@ -1,17 +1,19 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Sidebar from '../components/Sidebar'
 import Chat from '../components/Chat'
 import Register from './Register'
+import { AuthContext } from '../context/AuthContext'
 
 const Home = () => {
+    const { currentUser } = useContext(AuthContext);
+
     return (
-        <Register />
-        // <div className='home'>
-        //     <div className="container">
-        //         <Sidebar />
-        //         <Chat />
-        //     </div>
-        // </div>
+        <div className='home'>
+            <div className="container">
+                <Sidebar />
+                <Chat />
+            </div>
+        </div>
     )
 }
 
