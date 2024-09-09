@@ -4,12 +4,17 @@ import { auth, storage, db } from '../firebase';
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
+import { useNavigate } from 'react-router-dom';
+import Spinner from '../components/Spinner';
 
 const Register = () => {
+    const navigate = useNavigate();
     const [err, setErr] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [fileLabel, setFileLabel] = useState('Add avatar')
     const submitForm = async (e) => {
         e.preventDefault();
+        setLoading(true);
         const username = e.target[0].value;
         const email = e.target[1].value;
         const password = e.target[2].value;
@@ -49,14 +54,14 @@ const Register = () => {
                             photoURL: downloadURL,
                         });
 
-                        await setDoc(db, "userChats", res.user.uid, {});
+                        await setDoc(doc(db, "userChats", res.user.uid), {});
+                        navigate("/");
                     });
                 }
             );
-
-
         } catch (error) {
             setErr(true);
+            setLoading(false);
         }
     }
 
@@ -83,7 +88,10 @@ const Register = () => {
                         <img src={Avatar} alt='pick profile image' />
                         <span>{fileLabel}</span>
                     </label>
-                    <button>Sign up</button>
+                    {loading ?
+                        <Spinner />
+                        : <button>Sign up</button>
+                    }
                 </form>
                 {err && <p style={{ color: 'red' }}>Something went wrong.</p>}
                 <p>You already have an account? Login</p>
