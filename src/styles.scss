@@ -214,10 +214,12 @@
 .search {
   border-bottom: 1px solid rgb(240, 208, 255);
   .searchForm {
+    position: relative;
     height: 28px;
     margin-bottom: 10px;
 
     input {
+      color: rgb(247, 230, 255);
       padding: 2px 8px;
       height: 100%;
       width: 100%;
@@ -229,6 +231,16 @@
         color: rgb(240, 208, 255);
       }
     }
+    .spinHolder {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+    }
+  }
+  .error {
+    padding: 2px;
+    color: black;
+    text-align: center;
   }
 }
 
