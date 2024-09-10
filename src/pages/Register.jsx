@@ -4,7 +4,7 @@ import { auth, storage, db } from '../firebase';
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 
 const Register = () => {
@@ -94,7 +94,7 @@ const Register = () => {
                     }
                 </form>
                 {err && <p style={{ color: 'red' }}>Something went wrong.</p>}
-                <p>You already have an account? Login</p>
+                <p>You already have an account? <Link to="/login">Login</Link></p>
             </div>
         </div>
     )
