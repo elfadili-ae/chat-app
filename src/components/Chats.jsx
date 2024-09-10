@@ -1,14 +1,42 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from '../firebase';
+import { AuthContext } from '../context/AuthContext';
+import { ChatContext } from '../context/ChatContext';
+import { CHANGE_USER } from '../context/chatActions';
 
 const Chats = () => {
+    const { currentUser } = useContext(AuthContext);
+    const { dispatch } = useContext(ChatContext);
+    const [chats, setChats] = useState([]);
+
+    const handleSelect = (u) => {
+        dispatch({ type: CHANGE_USER, payload: u });
+    }
+
+    useEffect(() => {
+        const getChats = () => {
+            const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
+                setChats(doc.data());
+            });
+
+            return () => {
+                unsub();
+            }
+        }
+        currentUser.uid && getChats();
+    }, [currentUser.uid]);
+
     return (
-        <div className='userChat'>
-            <img src='https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' alt='profile picture' />
-            <div className="details">
-                <p className='name'>John</p>
-                <p className='last-message'>last message</p>
-            </div>
-        </div>
+        Object.entries(chats)?.map((element) => {
+            return (<div className='userChat' key={element[0]} onClick={() => { handleSelect(element[1].chatInfo) }}>
+                <img src={element[1].chatInfo.photoURL} alt='profile picture' />
+                <div className="details">
+                    <p className='name'>{element[1].chatInfo.displayName}</p>
+                    <p className='last-message'>{element[1].chatInfo?.lastMessage}</p>
+                </div>
+            </div>)
+        })
     )
 }
 

@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react'
 import { AuthContext } from '../context/AuthContext'
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, getDoc, setDoc, updateDoc, serverTimestamp, doc } from "firebase/firestore";
 import { db } from '../firebase';
 import TailSpinner from './TailSpinner';
 
 const Search = () => {
-    const currentUser = useContext(AuthContext);
+    const { currentUser } = useContext(AuthContext);
     const [searchTerm, setSearchTerm] = useState("");
     const [user, setUser] = useState(null);
     const [err, setErr] = useState(false);
@@ -38,16 +38,58 @@ const Search = () => {
             setLoading(true);
         }
     }
+
+    const handleSelect = async () => {
+        const combinedID = currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid;
+
+        try {
+            //get userchat 
+            const res = await getDoc(doc(db, "chats", combinedID));
+            if (!res.exists()) {
+                //create userchat if it does not exist
+                const chatRef = doc(db, "chats", combinedID);
+                await setDoc(chatRef, { messages: [] });
+            }
+
+            //create user chats
+            await updateDoc(doc(db, "userChats", currentUser.uid), {
+                [combinedID + ".chatInfo"]: {
+                    uid: user.uid,
+                    displayName: user.displayName,
+                    photoURL: user.photoURL,
+                },
+                [combinedID + ".date"]: serverTimestamp()
+            });
+
+            await updateDoc(doc(db, "userChats", user.uid), {
+                [combinedID + ".chatInfo"]: {
+                    uid: currentUser.uid,
+                    displayName: currentUser.displayName,
+                    photoURL: currentUser.photoURL,
+                },
+                [combinedID + ".date"]: serverTimestamp()
+            })
+        } catch (error) {
+            console.log(error);
+        }
+
+        setSearchTerm("");
+        setUser(null);
+    }
     return (
         <div className='search'>
             <div className='searchForm'>
-                <input type='text' placeholder='Find a user' onKeyDown={handleKey} onChange={(e) => { setSearchTerm(e.target.value) }} />
+                <input type='text'
+                    placeholder='Find a user'
+                    onKeyDown={handleKey}
+                    onChange={(e) => { setSearchTerm(e.target.value) }}
+                    value={searchTerm} />
                 {loading && <div className='spinHolder'>
                     <TailSpinner />
                 </div>}
             </div>
             {user ?
-                <div className='userChat'>
+                <div className='userChat' onClick={handleSelect}>
                     <img src={user.photoURL} alt='profile picture' />
                     <div className="details">
                         <p className='name'>{user.displayName}</p>
