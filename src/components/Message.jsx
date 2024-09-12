@@ -1,14 +1,25 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { AuthContext } from '../context/AuthContext'
+import { ChatContext } from '../context/ChatContext';
+import TimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en'
+import ReactTimeAgo from 'react-time-ago';
 
-const Message = ({ isOwner = false }) => {
+TimeAgo.addDefaultLocale(en)
+
+const Message = ({ message }) => {
+    const { currentUser } = useContext(AuthContext);
+    const { data } = useContext(ChatContext);
+
     return (
-        <div className={`message ${isOwner ? 'owner' : ''}`}>
+        <div className={`message ${message.sender === currentUser.uid ? 'owner' : ''}`}>
             <div className="messageInfo">
-                <img src='https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' alt='profile picture' />
-                <span>Just now</span>
+                <img src={message.sender === currentUser.uid ? currentUser.photoURL : data.user.photoURL}
+                    alt='profile picture' />
+                <span><ReactTimeAgo date={new Date(message.date.seconds * 1000 + Math.round(message.date.nanoseconds / 1000000))} locale="en-US" /></span>
             </div>
             <div className="messageContent">
-                <p>how are you?
+                <p>{message.text}
                 </p>
 
             </div>
