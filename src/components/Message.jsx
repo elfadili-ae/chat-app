@@ -16,7 +16,7 @@ const Message = ({ message }) => {
             <div className="messageInfo">
                 <img src={message.sender === currentUser.uid ? currentUser.photoURL : data.user.photoURL}
                     alt='profile picture' />
-                <span><ReactTimeAgo date={new Date(message.date.seconds * 1000 + Math.round(message.date.nanoseconds / 1000000))} locale="en-US" /></span>
+                <span><ReactTimeAgo date={new Date(message.date.seconds * 1000 + Math.round(message.date.nanoseconds / 1000000))} timeStyle="twitter" locale="en-US" /></span>
             </div>
             <div className="messageContent">
                 {message.text && <p>{message.text}</p>}
