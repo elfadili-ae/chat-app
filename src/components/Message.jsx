@@ -19,9 +19,8 @@ const Message = ({ message }) => {
                 <span><ReactTimeAgo date={new Date(message.date.seconds * 1000 + Math.round(message.date.nanoseconds / 1000000))} locale="en-US" /></span>
             </div>
             <div className="messageContent">
-                <p>{message.text}
-                </p>
-
+                {message.text && <p>{message.text}</p>}
+                {message?.photoURL && <img src={message.photoURL} alt='message photo' />}
             </div>
         </div>
     )
