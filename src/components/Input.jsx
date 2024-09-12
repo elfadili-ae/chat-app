@@ -3,9 +3,9 @@ import Gallery from '../images/gallery.png'
 import { ChatContext } from '../context/ChatContext';
 import { AuthContext } from '../context/AuthContext';
 import { Timestamp, arrayUnion, doc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db, storage } from '../firebase';
 import { v4 as uuid } from 'uuid';
-import { ref, uploadBytesResumable } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
 const Input = () => {
     const { data } = useContext(ChatContext);
@@ -20,8 +20,8 @@ const Input = () => {
         try {
             if (image) {
 
-                const storageRef = ref(storage, `${username}_${file.name}`);
-                const uploadTask = uploadBytesResumable(storageRef, file);
+                const storageRef = ref(storage, `${currentUser.displayName}_${image.name}`);
+                const uploadTask = uploadBytesResumable(storageRef, image);
                 uploadTask.on(
                     'state_changed', // Specify the event type
                     (snapshot) => {
@@ -63,6 +63,7 @@ const Input = () => {
             console.log(error);
         }
         setMsg("");
+        setImage(null);
     }
 
     const fileSelected = (e) => {
@@ -77,17 +78,21 @@ const Input = () => {
     }
     return (
         <div className='input'>
-            <input type='text'
-                placeholder='Say something...'
-                value={msg}
-                onChange={(e) => { setMsg(e.target.value) }} />
-            <div className='actions'>
-                <input type='file' id='file' style={{ display: 'none' }} onChange={fileSelected} />
-                <label htmlFor='file'>
-                    <img src={image ? URL.createObjectURL(image) : Gallery} alt='attach file' />
-                </label>
-                <button onClick={() => { handleSend() }}>Send</button>
-            </div>
+            {data.chatID !== "" ? <>
+                <input type='text'
+                    placeholder='Say something...'
+                    value={msg}
+                    onChange={(e) => { setMsg(e.target.value) }} />
+                <div className='actions'>
+                    <input type='file' id='file' style={{ display: 'none' }} onChange={fileSelected} />
+                    <label htmlFor='file'>
+                        <img src={image ? URL.createObjectURL(image) : Gallery} alt='attach file' />
+                    </label>
+                    <button onClick={() => { handleSend() }}>Send</button>
+                </div>
+            </>
+                : <p>Select a chat and have fun!</p>
+            }
         </div>
     )
 }
