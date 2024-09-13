@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import Gallery from '../images/gallery.png'
 import { ChatContext } from '../context/ChatContext';
 import { AuthContext } from '../context/AuthContext';
-import { Timestamp, arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { Timestamp, arrayUnion, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { db, storage } from '../firebase';
 import { v4 as uuid } from 'uuid';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
@@ -59,6 +59,21 @@ const Input = () => {
                     })
                 });
             }
+            //update chat for user
+            await updateDoc(doc(db, "userChats", data.user.uid), {
+                [data.chatID + ".lastMessage"]: {
+                    text: msg ? msg : "Photo"
+                },
+                [data.chatID + ".date"]: serverTimestamp(),
+            });
+            //update chat for currentuser
+            await updateDoc(doc(db, "userChats", currentUser.uid), {
+                [data.chatID + ".lastMessage"]: {
+                    text: msg ? msg : "Photo"
+                },
+                [data.chatID + ".date"]: serverTimestamp(),
+            });
+
         } catch (error) {
             console.log(error);
         }
