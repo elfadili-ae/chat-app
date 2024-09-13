@@ -138,6 +138,7 @@
 
     .sidebar {
       position: relative;
+      height: 100%;
       flex: 1;
       background-color: var(--light-purple);
       padding-bottom: 30px;
@@ -354,39 +355,46 @@
   }
 }
 
-.userChat {
-  color: white;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  img {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-  }
+.chats {
+  background-color: var(--dark-purple);
+  height: 100%;
+  overflow-y: scroll;
 
-  .name {
-    font-weight: bold;
-  }
-  .last-message {
-    color: rgb(240, 208, 255);
-  }
-
-  &:hover {
-    background-color: var(--dark-purple);
-  }
-
-  @include phone-and-tablet {
+  .userChat {
+    color: white;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     img {
-      width: 24px;
-      height: 24px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background-color: white;
     }
+
     .name {
-      font-size: 14px;
+      font-weight: bold;
     }
     .last-message {
-      font-size: 12px;
+      color: rgb(240, 208, 255);
+    }
+
+    &:hover {
+      background-color: var(--light-purple);
+    }
+
+    @include phone-and-tablet {
+      img {
+        width: 24px;
+        height: 24px;
+      }
+      .name {
+        font-size: 14px;
+      }
+      .last-message {
+        font-size: 12px;
+      }
     }
   }
 }

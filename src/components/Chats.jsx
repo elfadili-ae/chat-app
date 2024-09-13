@@ -28,15 +28,20 @@ const Chats = () => {
     }, [currentUser.uid]);
 
     return (
-        Object.entries(chats)?.map((element) => {
-            return (<div className='userChat' key={element[0]} onClick={() => { handleSelect(element[1].chatInfo) }}>
-                <img src={element[1].chatInfo.photoURL} alt='profile picture' />
-                <div className="details">
-                    <p className='name'>{element[1].chatInfo.displayName}</p>
-                    <p className='last-message'>{element[1].chatInfo?.lastMessage}</p>
+        <div className='chats'>
+            {Object.entries(chats)?.sort((a, b) => b[1].date - a[1].date).map((element) => {
+                const messageText = element[1]?.lastMessage?.text || "";
+                const lastMessagePreview = messageText.length > 12 ? `${messageText.slice(0, 12)}...` : messageText;
+
+                return <div className='userChat' key={element[0]} onClick={() => { handleSelect(element[1].chatInfo) }}>
+                    <img src={element[1].chatInfo.photoURL} alt='profile picture' />
+                    <div className="details">
+                        <p className='name'>{element[1].chatInfo.displayName}</p>
+                        <p className='last-message'>{lastMessagePreview}</p>
+                    </div>
                 </div>
-            </div>)
-        })
+            })}
+        </div>
     )
 }
 
