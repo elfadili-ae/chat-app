@@ -23,42 +23,60 @@ const Register = () => {
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
 
-            const storageRef = ref(storage, `${username}_${file.name}`);
+            if (file) {
 
-            const uploadTask = uploadBytesResumable(storageRef, file);
+                const storageRef = ref(storage, `${username}_${file.name}`);
 
-            uploadTask.on(
-                'state_changed', // Specify the event type
-                (snapshot) => {
-                    // You can monitor the progress of the upload here if needed
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log('Upload is ' + progress + '% done');
-                },
-                (error) => {
-                    // Handle unsuccessful uploads
-                    console.error("Error during upload:", error.message);
-                    setErr(true);
-                },
-                () => {
-                    // Handle successful uploads on complete
-                    getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-                        await updateProfile(res.user, {
-                            displayName: username,
-                            photoURL: downloadURL,
+                const uploadTask = uploadBytesResumable(storageRef, file);
+
+                uploadTask.on(
+                    'state_changed', // Specify the event type
+                    (snapshot) => {
+                        // You can monitor the progress of the upload here if needed
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('Upload is ' + progress + '% done');
+                    },
+                    (error) => {
+                        // Handle unsuccessful uploads
+                        console.error("Error during upload:", error.message);
+                        setErr(true);
+                    },
+                    () => {
+                        // Handle successful uploads on complete
+                        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+                            await updateProfile(res.user, {
+                                displayName: username,
+                                photoURL: downloadURL,
+                            });
+
+                            await setDoc(doc(db, "users", res.user.uid), {
+                                uid: res.user.uid,
+                                displayName: username,
+                                email,
+                                photoURL: downloadURL,
+                            });
+
+                            await setDoc(doc(db, "userChats", res.user.uid), {});
+                            navigate("/");
                         });
+                    }
+                );
+            } else {
+                await updateProfile(res.user, {
+                    displayName: username,
+                    photoURL: null,
+                });
 
-                        await setDoc(doc(db, "users", res.user.uid), {
-                            uid: res.user.uid,
-                            displayName: username,
-                            email,
-                            photoURL: downloadURL,
-                        });
+                await setDoc(doc(db, "users", res.user.uid), {
+                    uid: res.user.uid,
+                    displayName: username,
+                    email,
+                    photoURL: null,
+                });
 
-                        await setDoc(doc(db, "userChats", res.user.uid), {});
-                        navigate("/");
-                    });
-                }
-            );
+                await setDoc(doc(db, "userChats", res.user.uid), {});
+                navigate("/");
+            }
         } catch (error) {
             setErr(true);
             setLoading(false);

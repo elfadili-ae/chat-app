@@ -4,6 +4,7 @@ import { ChatContext } from '../context/ChatContext';
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import ReactTimeAgo from 'react-time-ago';
+import DefaultAvatar from '../images/defaultpic.png';
 
 TimeAgo.addDefaultLocale(en)
 
@@ -14,7 +15,9 @@ const Message = ({ message }) => {
     return (
         <div className={`message ${message.sender === currentUser.uid ? 'owner' : ''}`}>
             <div className="messageInfo">
-                <img src={message.sender === currentUser.uid ? currentUser.photoURL : data.user.photoURL}
+                <img src={message.sender === currentUser.uid ?
+                    (currentUser.photoURL ? currentUser.photoURL : DefaultAvatar)
+                    : data.user.photoURL ? data.user.photoURL : DefaultAvatar}
                     alt='profile picture' />
                 <span><ReactTimeAgo date={new Date(message.date.seconds * 1000 + Math.round(message.date.nanoseconds / 1000000))} timeStyle="twitter" locale="en-US" /></span>
             </div>

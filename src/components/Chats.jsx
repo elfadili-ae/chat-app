@@ -4,6 +4,7 @@ import { db } from '../firebase';
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
 import { CHANGE_USER } from '../context/chatActions';
+import DefaultAvatar from '../images/defaultpic.png'
 
 const Chats = () => {
     const { currentUser } = useContext(AuthContext);
@@ -34,7 +35,7 @@ const Chats = () => {
                 const lastMessagePreview = messageText.length > 12 ? `${messageText.slice(0, 12)}...` : messageText;
 
                 return <div className='userChat' key={element[0]} onClick={() => { handleSelect(element[1].chatInfo) }}>
-                    <img src={element[1].chatInfo.photoURL} alt='profile picture' />
+                    <img src={element[1].chatInfo.photoURL ? element[1].chatInfo.photoURL : DefaultAvatar} alt='profile picture' />
                     <div className="details">
                         <p className='name'>{element[1].chatInfo.displayName}</p>
                         <p className='last-message'>{lastMessagePreview}</p>

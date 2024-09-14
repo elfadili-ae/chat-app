@@ -3,6 +3,7 @@ import { AuthContext } from '../context/AuthContext'
 import { collection, query, where, getDocs, getDoc, setDoc, updateDoc, serverTimestamp, doc } from "firebase/firestore";
 import { db } from '../firebase';
 import TailSpinner from './TailSpinner';
+import DefaultAvatar from '../images/defaultpic.png'
 
 const Search = () => {
     const { currentUser } = useContext(AuthContext);
@@ -90,7 +91,7 @@ const Search = () => {
             </div>
             {user ?
                 <div className='userChat' onClick={handleSelect}>
-                    <img src={user.photoURL} alt='profile picture' />
+                    <img src={user.photoURL ? user.photoURL : DefaultAvatar} alt='profile picture' />
                     <div className="details">
                         <p className='name'>{user.displayName}</p>
                     </div>

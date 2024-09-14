@@ -138,7 +138,7 @@
 
     .sidebar {
       position: relative;
-      height: 100%;
+      height: calc(100% - 50px);
       flex: 1;
       background-color: var(--light-purple);
       padding-bottom: 30px;
@@ -200,6 +200,7 @@
     }
     .chat {
       flex: 2;
+      height: 100%;
       background-color: #ddcfe9;
     }
 
@@ -357,44 +358,43 @@
 
 .chats {
   background-color: var(--dark-purple);
-  height: 100%;
+  height: calc(100% - 42px);
   overflow-y: scroll;
+}
+.userChat {
+  color: white;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: white;
+  }
 
-  .userChat {
-    color: white;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  .name {
+    font-weight: bold;
+  }
+  .last-message {
+    color: rgb(240, 208, 255);
+  }
+
+  &:hover {
+    background-color: var(--light-purple);
+  }
+
+  @include phone-and-tablet {
     img {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background-color: white;
+      width: 24px;
+      height: 24px;
     }
-
     .name {
-      font-weight: bold;
+      font-size: 14px;
     }
     .last-message {
-      color: rgb(240, 208, 255);
-    }
-
-    &:hover {
-      background-color: var(--light-purple);
-    }
-
-    @include phone-and-tablet {
-      img {
-        width: 24px;
-        height: 24px;
-      }
-      .name {
-        font-size: 14px;
-      }
-      .last-message {
-        font-size: 12px;
-      }
+      font-size: 12px;
     }
   }
 }
