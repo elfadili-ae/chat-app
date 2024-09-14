@@ -138,11 +138,23 @@
 
     .sidebar {
       position: relative;
-      height: calc(100% - 50px);
+      height: 100%;
       flex: 1;
       background-color: var(--light-purple);
-      padding-bottom: 30px;
 
+      .hideBtn {
+        display: none;
+        width: 40px;
+        height: 50px;
+        background-color: var(--dark-purple);
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+
+        img {
+          width: 32px;
+          height: 32px;
+        }
+      }
       .navbar {
         height: 50px;
         background-color: var(--dark-purple);
@@ -185,7 +197,7 @@
           @include phone {
             button {
               position: absolute;
-              bottom: 8px;
+              bottom: 2px;
               left: 28px;
               background-color: var(--dark-purple);
             }
@@ -196,11 +208,32 @@
         h2 {
           display: none;
         }
+        .logo {
+          display: none;
+        }
       }
 
+      // sidebar phone
       @include phone {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: calc(100%);
         flex: none;
-        width: 100px;
+        width: 50%;
+        transition: left 0.3s ease;
+
+        .hideBtn {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: absolute;
+          right: -40px;
+          top: 8px;
+        }
+        &.hide {
+          left: -50%;
+        }
       }
     }
     .chat {
@@ -223,7 +256,7 @@
   .searchForm {
     position: relative;
     height: 28px;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
 
     input {
       color: rgb(247, 230, 255);
@@ -254,7 +287,7 @@
 .messages {
   overflow-y: scroll;
   padding: 12px;
-  height: calc(100% - 144px);
+  height: calc(100% - 156px);
 
   .message {
     display: flex;
@@ -363,7 +396,7 @@
 
 .chats {
   background-color: var(--dark-purple);
-  height: calc(100% - 42px);
+  height: calc(100% - 94px);
   overflow-y: scroll;
 }
 .userChat {
@@ -422,6 +455,13 @@
         width: 20px;
         height: 20px;
         cursor: pointer;
+      }
+    }
+
+    @include phone {
+      span {
+        padding-left: 40px;
+        text-align: center;
       }
     }
   }

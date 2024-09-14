@@ -12,7 +12,7 @@ const Navbar = () => {
     return (
         <div className='navbar'>
             {/* <h2 className='logo'>Chat App</h2> */}
-            <img src={logo} alt='chat app logo' />
+            <img className='logo' src={logo} alt='chat app logo' />
             <div className='user'>
                 <img src={currentUser.photoURL ? currentUser.photoURL : DefaultAvatar} alt='profile picture' />
                 <p>{currentUser.displayName}</p>
