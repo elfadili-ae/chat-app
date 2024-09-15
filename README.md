@@ -32,7 +32,12 @@ git clone https://github.com/elfadili-ae/chat-app.git
 cd chat-app
 ```
 
-3. Run the app:
+3. Install dependencies:
+```bash
+npm install
+```
+
+4. Run the app:
 ```bash
 npm run dev
 ```
